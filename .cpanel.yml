@@ -1,6 +1,4 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/overnzbk/public_html/crm/
-    - /bin/mkdir -p "$DEPLOYPATH"
-    - /bin/cp -R public/. "$DEPLOYPATH"
+    - /bin/echo 'OH ONE uses repository public as document root; no copy needed.'
