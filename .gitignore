@@ -13,3 +13,5 @@
 *.sql.gz
 *.zip
 .DS_Store
+
+/config.php
