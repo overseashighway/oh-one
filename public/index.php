@@ -14,7 +14,7 @@ if ($founder) {
  $recent=$db->query('SELECT l.full_name,l.status,l.service_interest,l.created_at,o.name AS office_name FROM leads l JOIN offices o ON o.id=l.office_id ORDER BY l.id DESC LIMIT 8')->fetchAll();
 } else {
  $s=$db->prepare('SELECT COUNT(*) FROM offices WHERE id=?');$s->execute([$officeId]);$offices=(int)$s->fetchColumn();
- $s=$db->prepare('SELECT COUNT(*) FROM leads WHERE office_id=?');$s->execute([$officeId]);$leads=(int)$s->fetchColumn();
+ $s=$db->prepare('SELECT COUNT(*) FROM leads WHERE office_id=? AND id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?)');$s->execute([$officeId,(int)$u['id']]);$leads=(int)$s->fetchColumn();
  $s=$db->prepare('SELECT status,COUNT(*) AS total FROM leads WHERE office_id=? GROUP BY status');$s->execute([$officeId]);$statusRows=$s->fetchAll();
  $s=$db->prepare('SELECT o.name,COUNT(l.id) AS total FROM offices o LEFT JOIN leads l ON l.office_id=o.id WHERE o.id=? GROUP BY o.id,o.name');$s->execute([$officeId]);$officeRows=$s->fetchAll();
  $s=$db->prepare('SELECT l.full_name,l.status,l.service_interest,l.created_at,o.name AS office_name FROM leads l JOIN offices o ON o.id=l.office_id WHERE l.office_id=? ORDER BY l.id DESC LIMIT 8');$s->execute([$officeId]);$recent=$s->fetchAll();
