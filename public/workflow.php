@@ -36,8 +36,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   }elseif($action==='taskstatus'){
    $id=(int)($_POST['id']??0);$status=(string)($_POST['status']??'');
    if($id<1||!in_array($status,['open','in_progress','done'],true))throw new RuntimeException('Invalid task.');
-   $s=$db->prepare('UPDATE crm_tasks SET status=? WHERE id=?'.($founder?'':' AND assigned_to=? AND office_id=?'));
-   $s->execute($founder?[$status,$id]:[$status,$id,$uid,$office]);$ok=$s->rowCount()?'Task updated.':'No change or permission denied.';
+   $s=$db->prepare('UPDATE crm_tasks SET status=? WHERE id=?'.($founder?'':' AND assigned_to=? AND office_id=? AND (lead_id IS NULL OR lead_id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?))'));
+   $s->execute($founder?[$status,$id]:[$status,$id,$uid,$office,$uid]);$ok=$s->rowCount()?'Task updated.':'No change or permission denied.';
   }else throw new RuntimeException('Action not allowed.');
  }catch(RuntimeException $ex){$error=$ex->getMessage();}
  catch(PDOException $ex){$error='Database operation failed. Verify Phase 3 migration.';}
