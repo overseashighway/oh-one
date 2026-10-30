@@ -23,7 +23,13 @@ function e(?string $v): string { return htmlspecialchars($v ?? '', ENT_QUOTES | 
 function require_login(): array {
     boot_session();
     if (empty($_SESSION['uid'])) { header('Location: /login.php'); exit; }
-    return ['id'=>(int)$_SESSION['uid'], 'role'=>(string)$_SESSION['role'], 'office_id'=>$_SESSION['office_id'] ?? null];
+    $db=require dirname(__DIR__).'/app/db.php';
+    $s=$db->prepare('SELECT id,role,office_id FROM users WHERE id=? AND is_active=1 LIMIT 1');
+    $s->execute([(int)$_SESSION['uid']]);
+    $account=$s->fetch();
+    if(!$account){$_SESSION=[];session_regenerate_id(true);header('Location: /login.php');exit;}
+    $_SESSION['role']=$account['role'];$_SESSION['office_id']=$account['office_id'];
+    return ['id'=>(int)$account['id'],'role'=>(string)$account['role'],'office_id'=>$account['office_id']];
 }
 function require_founder(): array {
     $u=require_login();
