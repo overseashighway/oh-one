@@ -32,14 +32,14 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
   if ($id<=0 || !in_array($status,$allowed,true)) $error='Invalid status.';
   else {
    if ($isFounder) {$s=$db->prepare('UPDATE leads SET status=? WHERE id=?');$s->execute([$status,$id]);}
-   else {$s=$db->prepare('UPDATE leads SET status=? WHERE id=? AND office_id=?');$s->execute([$status,$id,$officeId]);}
+   else {$s=$db->prepare('UPDATE leads SET status=? WHERE id=? AND office_id=? AND id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?)');$s->execute([$status,$id,$officeId,(int)$u['id']]);}
    $success=$s->rowCount()?'Status updated.':'No change or access denied.';
   }
  } else $error='Action not allowed.';
 }
 $offices=$isFounder?$db->query('SELECT id,name,code FROM offices WHERE is_active=1 ORDER BY name')->fetchAll():[];
 if ($isFounder) $rows=$db->query('SELECT l.id,l.full_name,l.email,l.phone,l.service_interest,l.status,l.source,l.created_at,o.name AS office_name FROM leads l JOIN offices o ON o.id=l.office_id ORDER BY l.id DESC LIMIT 100')->fetchAll();
-else {$s=$db->prepare('SELECT l.id,l.full_name,l.email,l.phone,l.service_interest,l.status,l.source,l.created_at,o.name AS office_name FROM leads l JOIN offices o ON o.id=l.office_id WHERE l.office_id=? ORDER BY l.id DESC LIMIT 100');$s->execute([$officeId]);$rows=$s->fetchAll();}
+else {$s=$db->prepare('SELECT l.id,l.full_name,l.email,l.phone,l.service_interest,l.status,l.source,l.created_at,o.name AS office_name FROM leads l JOIN offices o ON o.id=l.office_id WHERE l.office_id=? AND l.id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?) ORDER BY l.id DESC LIMIT 100');$s->execute([$officeId,(int)$u['id']]);$rows=$s->fetchAll();}
 $statuses=['new','contacted','qualified','application','converted','lost'];
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store');
