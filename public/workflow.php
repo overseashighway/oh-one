@@ -55,7 +55,7 @@ if($founder){
  $offices=[];
  $s=$db->prepare('SELECT l.full_name AS lead_name,u.full_name AS staff_name,o.name AS office_name FROM lead_assignments a JOIN leads l ON l.id=a.lead_id JOIN users u ON u.id=a.user_id JOIN offices o ON o.id=l.office_id WHERE l.office_id=? AND a.user_id=? ORDER BY a.assigned_at DESC LIMIT 40');$s->execute([$office,$uid]);$assignments=$s->fetchAll();
  $s=$db->prepare('SELECT l.full_name AS lead_name,f.contact_method,f.outcome,f.note,f.next_followup_at,f.created_at FROM lead_followups f JOIN leads l ON l.id=f.lead_id WHERE l.office_id=? AND l.id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?) ORDER BY f.id DESC LIMIT 40');$s->execute([$office,$uid]);$followups=$s->fetchAll();
- $s=$db->prepare('SELECT t.id,t.title,t.status,t.priority,t.due_at,u.full_name AS assignee FROM crm_tasks t JOIN users u ON u.id=t.assigned_to WHERE t.office_id=? AND t.assigned_to=? ORDER BY (t.status="done"),t.due_at IS NULL,t.due_at,t.id DESC LIMIT 80');$s->execute([$office,$uid]);$tasks=$s->fetchAll();
+ $s=$db->prepare('SELECT t.id,t.title,t.status,t.priority,t.due_at,u.full_name AS assignee FROM crm_tasks t JOIN users u ON u.id=t.assigned_to WHERE t.office_id=? AND t.assigned_to=? AND (t.lead_id IS NULL OR t.lead_id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?)) ORDER BY (t.status="done"),t.due_at IS NULL,t.due_at,t.id DESC LIMIT 80');$s->execute([$office,$uid,$uid]);$tasks=$s->fetchAll();
 }
 if($_SERVER['REQUEST_METHOD']==='POST' && $error===''){boot_session();$_SESSION['workflow_notice']=$ok;header('Location: /workflow.php',true,303);exit;}
 boot_session();if(isset($_SESSION['workflow_notice'])){$ok=(string)$_SESSION['workflow_notice'];unset($_SESSION['workflow_notice']);}
