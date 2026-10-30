@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
   $country=strtoupper(trim((string)($_POST['country']??''))); $city=trim((string)($_POST['city']??''));
   if (mb_strlen($name)<2 || mb_strlen($name)>150 || !preg_match('/^[A-Z0-9_-]{2,30}$/',$code) || !preg_match('/^[A-Z]{2}$/',$country) || mb_strlen($city)>100) $error='Check office details.';
   else { try { $s=$db->prepare('INSERT INTO offices (name,code,country_code,city) VALUES (?,?,?,?)');$s->execute([$name,$code,$country,$city?:null]);$success='Office added.'; } catch(PDOException $ex){$error='Could not add office. Check that the code is unique.';} }
- } elseif ($action==='lead') {
+ } elseif ($action==='lead' && $isFounder) {
   $name=trim((string)($_POST['name']??'')); $email=trim((string)($_POST['email']??'')); $phone=trim((string)($_POST['phone']??''));
   $service=(string)($_POST['service']??''); $source=trim((string)($_POST['source']??''));$notes=trim((string)($_POST['notes']??''));
   $target=$isFounder?(int)($_POST['office_id']??0):$officeId;
@@ -40,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
 $offices=$isFounder?$db->query('SELECT id,name,code FROM offices WHERE is_active=1 ORDER BY name')->fetchAll():[];
 if ($isFounder) $rows=$db->query('SELECT l.id,l.full_name,l.email,l.phone,l.service_interest,l.status,l.source,l.created_at,o.name AS office_name FROM leads l JOIN offices o ON o.id=l.office_id ORDER BY l.id DESC LIMIT 100')->fetchAll();
 else {$s=$db->prepare('SELECT l.id,l.full_name,l.email,l.phone,l.service_interest,l.status,l.source,l.created_at,o.name AS office_name FROM leads l JOIN offices o ON o.id=l.office_id WHERE l.office_id=? AND l.id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?) ORDER BY l.id DESC LIMIT 100');$s->execute([$officeId,(int)$u['id']]);$rows=$s->fetchAll();}
+if($_SERVER['REQUEST_METHOD']==='POST' && $error===''){boot_session();$_SESSION['leads_notice']=$success;header('Location: /leads.php',true,303);exit;}
+boot_session();if(isset($_SESSION['leads_notice'])){$success=(string)$_SESSION['leads_notice'];unset($_SESSION['leads_notice']);}
 $statuses=['new','contacted','qualified','application','converted','lost'];
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store');
@@ -49,10 +51,10 @@ header('Cache-Control: no-store');
 <?php if($error):?><p class="error"><?=e($error)?></p><?php endif;?><?php if($success):?><p class="notice"><?=e($success)?></p><?php endif;?>
 <?php if($isFounder && !$offices):?><section><h2>First: Add an office</h2><p>You need an office before you can add leads.</p></section><?php endif;?>
 <?php if($isFounder):?><section><h2>Add Office</h2><form method="post"><input type="hidden" name="csrf" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="office"><div class="fields"><label>Office name<input name="name" required maxlength="150" placeholder="Malaysia HQ"></label><label>Unique code<input name="code" required maxlength="30" placeholder="MY-HQ"></label><label>Country (2-letter code)<input name="country" required maxlength="2" placeholder="MY"></label><label>City<input name="city" maxlength="100" placeholder="Kuala Lumpur"></label></div><button>Add office</button></form></section><?php endif;?>
-<section><h2>Add Lead</h2><form method="post"><input type="hidden" name="csrf" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="lead"><div class="fields">
+<?php if($isFounder):?><section><h2>Add Lead</h2><form method="post"><input type="hidden" name="csrf" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="lead"><div class="fields">
 <label>Full name<input name="name" required maxlength="200"></label><label>Email<input name="email" type="email" maxlength="255"></label><label>Phone<input name="phone" maxlength="50"></label>
 <?php if($isFounder):?><label>Office<select name="office_id" required><option value="">Choose office</option><?php foreach($offices as $o):?><option value="<?=(int)$o['id']?>"><?=e($o['name'])?> (<?=e($o['code'])?>)</option><?php endforeach;?></select></label><?php endif;?>
-<label>Service<select name="service" required><option>Education</option><option>Migration</option><option>Travel</option><option>Investment</option><option>Other</option></select></label><label>Lead source<input name="source" maxlength="80" placeholder="Facebook, Referral, WhatsApp"></label></div><label>Notes<textarea name="notes" maxlength="5000" rows="2"></textarea></label><button>Add lead</button></form></section>
+<label>Service<select name="service" required><option>Education</option><option>Migration</option><option>Travel</option><option>Investment</option><option>Other</option></select></label><label>Lead source<input name="source" maxlength="80" placeholder="Facebook, Referral, WhatsApp"></label></div><label>Notes<textarea name="notes" maxlength="5000" rows="2"></textarea></label><button>Add lead</button></form></section><?php endif;?>
 <section><h2>Recent Leads</h2><div class="scroll"><table><thead><tr><th>ID</th><th>Name</th><th>Office</th><th>Service</th><th>Email</th><th>Phone</th><th>Source</th><th>Created</th><th>Status</th></tr></thead><tbody>
 <?php foreach($rows as $r):?><tr><td><?=(int)$r['id']?></td><td><?=e($r['full_name'])?></td><td><?=e($r['office_name'])?></td><td><?=e($r['service_interest'])?></td><td><?=e($r['email'])?></td><td><?=e($r['phone'])?></td><td><?=e($r['source'])?></td><td><?=e($r['created_at'])?></td><td><form method="post"><input type="hidden" name="csrf" value="<?=e(csrf_token())?>"><input type="hidden" name="action" value="status"><input type="hidden" name="lead_id" value="<?=(int)$r['id']?>"><select name="status"><?php foreach($statuses as $status):?><option value="<?=e($status)?>" <?=$r['status']===$status?'selected':''?>><?=e(ucfirst($status))?></option><?php endforeach;?></select><button>Save</button></form></td></tr><?php endforeach;?>
 <?php if(!$rows):?><tr><td colspan="9">No leads yet.</td></tr><?php endif;?></tbody></table></div></section><p><small>OH ONE Phase 2 · Basic lead management. Do not upload sensitive documents here.</small></p></main></body></html>
