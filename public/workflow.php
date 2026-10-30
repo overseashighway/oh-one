@@ -5,7 +5,7 @@ $u=require_login(); $db=require dirname(__DIR__).'/app/db.php';
 $founder=$u['role']==='founder'; $uid=(int)$u['id'];$office=(int)($u['office_id']??0);
 if(!$founder && !$office){http_response_code(403);exit('Office not assigned');}
 function wfdate(string $v):?string {if($v==='')return null; $d=DateTimeImmutable::createFromFormat('!Y-m-d\TH:i',$v);return $d&&$d->format('Y-m-d\TH:i')===$v?$d->format('Y-m-d H:i:s'):null;}
-function canlead(PDO $db,int $id,bool $founder,int $office):?array {$s=$db->prepare('SELECT id,office_id,full_name FROM leads WHERE id=?'.($founder?'':' AND office_id=?'));$s->execute($founder?[$id]:[$id,$office]);return $s->fetch()?:null;}
+function canlead(PDO $db,int $id,bool $founder,int $office,int $uid=0):?array {$s=$db->prepare('SELECT id,office_id,full_name FROM leads WHERE id=?'.($founder?'':' AND office_id=? AND id IN (SELECT lead_id FROM lead_assignments WHERE user_id=?)'));$s->execute($founder?[$id]:[$id,$office,$uid]);return $s->fetch()?:null;}
 function canuser(PDO $db,int $id,int $office):bool {$s=$db->prepare('SELECT id FROM users WHERE id=? AND office_id=? AND is_active=1');$s->execute([$id,$office]);return(bool)$s->fetch();}
 $error='';$ok='';
 if($_SERVER['REQUEST_METHOD']==='POST'){
@@ -18,14 +18,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
    $s=$db->prepare('INSERT INTO lead_assignments (lead_id,user_id,assigned_by) VALUES (?,?,?) ON DUPLICATE KEY UPDATE user_id=VALUES(user_id),assigned_by=VALUES(assigned_by),assigned_at=CURRENT_TIMESTAMP');
    $s->execute([(int)$lead['id'],$assignee,$uid]);$ok='Lead assigned.';
   }elseif($action==='followup'){
-   $lead=canlead($db,(int)($_POST['lead']??0),$founder,$office);
+   $lead=canlead($db,(int)($_POST['lead']??0),$founder,$office,$uid);
    $method=(string)($_POST['method']??'');$outcome=(string)($_POST['outcome']??'');$note=trim((string)($_POST['note']??''));
    $raw=(string)($_POST['next']??'');$next=wfdate($raw);
    if(!$lead||!in_array($method,['Call','WhatsApp','Email','Meeting'],true)||!in_array($outcome,['Pending','Connected','No answer','Completed'],true)||mb_strlen($note)<2||mb_strlen($note)>3000||($raw!==''&&!$next))throw new RuntimeException('Check follow-up details.');
    $s=$db->prepare('INSERT INTO lead_followups (lead_id,user_id,contact_method,outcome,note,next_followup_at) VALUES (?,?,?,?,?,?)');
    $s->execute([(int)$lead['id'],$uid,$method,$outcome,$note,$next]);$ok='Follow-up saved.';
   }elseif($action==='task'){
-   $leadId=(int)($_POST['lead']??0);$lead=$leadId?canlead($db,$leadId,$founder,$office):null;
+   $leadId=(int)($_POST['lead']??0);$lead=$leadId?canlead($db,$leadId,$founder,$office,$uid):null;
    $targetOffice=$lead?(int)$lead['office_id']:($founder?(int)($_POST['office']??0):$office);
    $assignee=(int)($_POST['assignee']??0);$title=trim((string)($_POST['title']??''));$details=trim((string)($_POST['details']??''));
    $priority=(string)($_POST['priority']??'');$raw=(string)($_POST['due']??'');$due=wfdate($raw);
