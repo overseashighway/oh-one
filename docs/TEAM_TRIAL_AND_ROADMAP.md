@@ -28,3 +28,21 @@ P4: notifications, automation, granular permissions and integrations.
 
 ## Known limitations
 Not production-hardened. Staff password reset deferred. Browser-side lead search covers only the 100 visible records. Current dashboard follow-up counter counts records, not unique leads. Backup export downloaded but restore not tested. Existing tests are limited and not a security audit.
+
+## Finance and staff task expansion (requested 2026-10-31)
+Build incrementally, without delaying the Malaysia + Bangladesh 5–6-person pilot.
+
+### Phase 1: simple income/expense ledger
+Record date, office, category, description, amount, currency (MYR/BDT and others), payment status, creator, and optional related student/service. Keep income and expenses separate and calculate monthly office-wise totals. Do not combine different currencies without an explicit dated exchange rate. Limit finance access by role.
+
+### Phase 2: controlled expense workflows
+Expense submission by staff; approval/rejection by founder/admin; receipt attachments with access controls; payment method, reference, and audit history. Distinguish submitted, approved, paid and rejected. Prevent deletion of approved transactions without reversal/audit.
+
+### Phase 3: management accounting
+Recurring rent, salaries, utilities, marketing; monthly budgets and variance, service revenue and commission receivables, cashflow reporting and export. Financial dashboard should not claim accounting/tax compliance without review.
+
+### Staff tasks and strategic alignment
+Tasks need office, assignee, deadline, priority, status, outcome and optional link to lead, expense or strategic goal. Founder goals are measurable targets and should not be reduced to checklists. Allow founder to monitor completion and overdue work across offices; staff can see only their own permitted work.
+
+### Guardrails
+Finance records are sensitive. Use server-side authorization, audit trails, backups, and secure attachment handling before real financial data. Never commit bank details or financial records to GitHub.
