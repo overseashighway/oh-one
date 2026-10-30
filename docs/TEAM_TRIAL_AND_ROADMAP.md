@@ -46,3 +46,11 @@ Tasks need office, assignee, deadline, priority, status, outcome and optional li
 
 ### Guardrails
 Finance records are sensitive. Use server-side authorization, audit trails, backups, and secure attachment handling before real financial data. Never commit bank details or financial records to GitHub.
+
+## International brand and unified access experience (requested 2026-10-31)
+- Replace the dated plain visual experience with a cohesive premium, responsive OH ONE identity across the landing page and authenticated dashboards; retain existing business logic and security checks.
+- Use the **authentic Overseas Highway logo** as a prominent brand element. Obtain the original logo asset from the owner or verified company source; never fabricate or misrepresent an imitation as official.
+- Provide one polished central entry point for Founder, Manager, Staff, B2B Partner, Franchise, and Technical/Developer users. Only enable role-specific workspaces once corresponding accounts, permissions, routes and authorization checks are implemented; clearly mark future areas as coming soon.
+- Distinguish a public presentation/marketing landing page from authenticated private operational dashboards; avoid leaking CRM data to unauthenticated users.
+- Keep role-specific navigation, consistent visual design, mobile accessibility, secure sign-in, and clear active-vs-planned feature labels.
+- Roll out safely: branded login/landing, dashboard UI modernization, then role-specific portals. Verify pilot operations after each deploy.
