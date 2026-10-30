@@ -1,0 +1,45 @@
+-- OH ONE Phase 3. Import ONCE into the existing OH ONE database after backing it up.
+CREATE TABLE IF NOT EXISTS lead_assignments (
+ lead_id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+ user_id BIGINT UNSIGNED NOT NULL,
+ assigned_by BIGINT UNSIGNED NOT NULL,
+ assigned_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT,
+ FOREIGN KEY (assigned_by) REFERENCES users(id) ON DELETE RESTRICT,
+ INDEX idx_assignment_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS lead_followups (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ lead_id BIGINT UNSIGNED NOT NULL,
+ user_id BIGINT UNSIGNED NOT NULL,
+ contact_method VARCHAR(30) NOT NULL,
+ outcome VARCHAR(40) NOT NULL,
+ note TEXT NOT NULL,
+ next_followup_at DATETIME NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE,
+ FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT,
+ INDEX idx_followup_lead (lead_id,created_at),
+ INDEX idx_followup_due (next_followup_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS crm_tasks (
+ id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ lead_id BIGINT UNSIGNED NULL,
+ office_id BIGINT UNSIGNED NOT NULL,
+ assigned_to BIGINT UNSIGNED NOT NULL,
+ created_by BIGINT UNSIGNED NOT NULL,
+ title VARCHAR(200) NOT NULL,
+ details TEXT NULL,
+ priority VARCHAR(12) NOT NULL DEFAULT 'normal',
+ status VARCHAR(20) NOT NULL DEFAULT 'open',
+ due_at DATETIME NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE SET NULL,
+ FOREIGN KEY (office_id) REFERENCES offices(id) ON DELETE RESTRICT,
+ FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE RESTRICT,
+ FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE RESTRICT,
+ INDEX idx_task_assignee (assigned_to,status,due_at),
+ INDEX idx_task_office (office_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
