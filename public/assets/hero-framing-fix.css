@@ -1,19 +1,7 @@
-/* OH ONE: compact headline, clear landmark framing; preserve login */
-@media(min-width:901px){
-.top{height:78px!important}
-.hero{min-height:615px!important}
-.intro{padding-top:24px!important;max-width:225px!important}
-.intro .eyebrow{font-size:14px!important}
-.intro h1{font-size:clamp(30px,2.45vw,38px)!important;line-height:1.1!important;white-space:normal!important;margin:10px 0!important;letter-spacing:-.035em!important}
-.intro .lead{font-size:13px!important;max-width:205px!important;line-height:1.4!important}
-.intro p.desc,.pillars{display:none!important}
-.hero-art{left:13%!important;right:-1%!important;top:-5px!important;bottom:0!important;background-size:contain!important;background-position:center center!important;mask-image:linear-gradient(to right,transparent 0%,#000 3%,#000 100%)!important;filter:none!important}
-}
-@media(max-width:900px){
-.top{height:70px!important}
-.intro p.desc,.pillars{display:none!important}
-.intro h1{font-size:clamp(35px,7vw,48px)!important;line-height:1.1!important;white-space:normal!important}
-.hero{min-height:650px!important}
-.hero-art{left:0!important;right:0!important;top:215px!important;bottom:0!important;background-size:contain!important;background-position:center top!important;mask-image:none!important}
-}
-@media(max-width:560px){.hero{min-height:560px!important}.hero-art{top:210px!important}}
+/* OH ONE approved journey artwork: full-width focus and clean header */
+.intro{display:none!important}
+.hero{display:block!important;min-height:clamp(520px,49vw,760px)!important}
+.hero-art{position:absolute!important;inset:0!important;left:0!important;right:0!important;top:0!important;bottom:0!important;background-image:url('/assets/same_as_previous_scene_but_refined_the_overseas.png')!important;background-size:contain!important;background-position:center center!important;background-repeat:no-repeat!important;mask-image:none!important;filter:none!important;opacity:1!important}
+.hero-art::after{content:"";position:absolute;left:9%;top:1.5%;width:24%;height:12%;pointer-events:none;backdrop-filter:blur(17px);-webkit-backdrop-filter:blur(17px);mask-image:radial-gradient(ellipse at center,#000 42%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at center,#000 42%,transparent 75%)}
+@media(max-width:900px){.hero{min-height:clamp(330px,57vw,540px)!important}.hero-art{inset:0!important;background-position:center center!important}.hero-art::after{left:8%;top:5%;width:25%;height:12%}}
+@media(max-width:560px){.hero{min-height:58vw!important;min-height:max(230px,58vw)!important}.hero-art{inset:0!important}.hero-art::after{left:7%;top:5%;width:26%;height:13%}}
