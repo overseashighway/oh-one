@@ -1,18 +1,18 @@
-/* OH ONE: balanced artwork framing, compact left copy */
+/* OH ONE: compact headline, clear landmark framing; preserve login */
 @media(min-width:901px){
 .top{height:78px!important}
 .hero{min-height:615px!important}
-.intro{padding-top:24px!important;max-width:245px!important}
+.intro{padding-top:24px!important;max-width:225px!important}
 .intro .eyebrow{font-size:14px!important}
-.intro h1{font-size:clamp(32px,2.65vw,41px)!important;line-height:1.09!important;white-space:normal!important;margin:10px 0!important}
-.intro .lead{font-size:13px!important;max-width:225px!important}
+.intro h1{font-size:clamp(30px,2.45vw,38px)!important;line-height:1.1!important;white-space:normal!important;margin:10px 0!important;letter-spacing:-.035em!important}
+.intro .lead{font-size:13px!important;max-width:205px!important;line-height:1.4!important}
 .intro p.desc,.pillars{display:none!important}
-.hero-art{left:17%!important;right:0!important;top:-5px!important;bottom:0!important;background-size:contain!important;background-position:center center!important;mask-image:linear-gradient(to right,transparent 0%,#000 5%,#000 100%)!important;filter:none!important}
+.hero-art{left:13%!important;right:-1%!important;top:-5px!important;bottom:0!important;background-size:contain!important;background-position:center center!important;mask-image:linear-gradient(to right,transparent 0%,#000 3%,#000 100%)!important;filter:none!important}
 }
 @media(max-width:900px){
 .top{height:70px!important}
 .intro p.desc,.pillars{display:none!important}
-.intro h1{font-size:clamp(37px,8vw,50px)!important}
+.intro h1{font-size:clamp(35px,7vw,48px)!important;line-height:1.1!important;white-space:normal!important}
 .hero{min-height:650px!important}
 .hero-art{left:0!important;right:0!important;top:215px!important;bottom:0!important;background-size:contain!important;background-position:center top!important;mask-image:none!important}
 }
