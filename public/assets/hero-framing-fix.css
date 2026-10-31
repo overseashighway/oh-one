@@ -1,4 +1,16 @@
-/* OH ONE image framing adjustment, 31 October 2026 */
-.hero-art{background-size:contain!important;background-repeat:no-repeat!important;background-position:center center!important;left:22%!important;right:0!important;filter:none!important}
-@media(max-width:900px){.hero-art{left:0!important;right:0!important;top:320px!important}}
-@media(max-width:560px){.hero-art{left:0!important;right:0!important;top:320px!important}}
+/* Refined hero: compact header, more visible Malaysia, edge-to-edge cinematic artwork */
+@media(min-width:901px){
+.top{height:76px!important}
+.hero{min-height:680px!important}
+.intro{padding-top:24px!important;max-width:360px!important}
+.intro h1{font-size:clamp(40px,3.6vw,56px)!important;white-space:normal!important;line-height:1.06!important}
+.intro p.desc{font-size:13px!important;max-width:340px!important}
+.pillars{width:345px!important;gap:6px!important}
+.pillar{font-size:11px!important;padding:10px 3px!important}
+.pillar svg{width:22px!important;height:22px!important;margin-bottom:5px!important}
+.hero-art{left:23%!important;right:-5%!important;top:-22px!important;bottom:-16px!important;background-size:cover!important;background-position:42% center!important;mask-image:linear-gradient(to right,transparent 0%,#000 8%,#000 100%)!important}
+}
+@media(max-width:900px){
+.top{height:70px!important}
+.hero-art{left:-2%!important;right:-2%!important;background-size:contain!important;background-position:center center!important}
+}
