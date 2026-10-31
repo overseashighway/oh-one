@@ -1,22 +1,19 @@
-/* Balanced OH ONE hero: midpoint scale and unobstructed Malaysia view */
+/* OH ONE: balanced artwork framing, compact left copy */
 @media(min-width:901px){
-.top{height:82px!important}
-.hero{min-height:620px!important}
-.intro{padding-top:22px!important;max-width:285px!important}
-.intro h1{font-size:clamp(35px,3.1vw,46px)!important;line-height:1.08!important;white-space:normal!important}
-.intro .lead{font-size:15px!important}
-.intro p.desc{display:none!important}
-.pillars{display:none!important}
-.hero-art{left:22%!important;right:1%!important;top:0!important;bottom:22px!important;background-size:contain!important;background-position:center center!important;mask-image:linear-gradient(to right,transparent 0%,#000 6%,#000 100%)!important;filter:none!important}
+.top{height:78px!important}
+.hero{min-height:615px!important}
+.intro{padding-top:24px!important;max-width:245px!important}
+.intro .eyebrow{font-size:14px!important}
+.intro h1{font-size:clamp(32px,2.65vw,41px)!important;line-height:1.09!important;white-space:normal!important;margin:10px 0!important}
+.intro .lead{font-size:13px!important;max-width:225px!important}
+.intro p.desc,.pillars{display:none!important}
+.hero-art{left:17%!important;right:0!important;top:-5px!important;bottom:0!important;background-size:contain!important;background-position:center center!important;mask-image:linear-gradient(to right,transparent 0%,#000 5%,#000 100%)!important;filter:none!important}
 }
 @media(max-width:900px){
-.top{height:72px!important}
-.hero{min-height:680px!important}
+.top{height:70px!important}
 .intro p.desc,.pillars{display:none!important}
-.intro h1{font-size:clamp(39px,8vw,54px)!important}
+.intro h1{font-size:clamp(37px,8vw,50px)!important}
+.hero{min-height:650px!important}
 .hero-art{left:0!important;right:0!important;top:215px!important;bottom:0!important;background-size:contain!important;background-position:center top!important;mask-image:none!important}
 }
-@media(max-width:560px){
-.hero{min-height:570px!important}
-.hero-art{top:210px!important}
-}
+@media(max-width:560px){.hero{min-height:560px!important}.hero-art{top:210px!important}}
