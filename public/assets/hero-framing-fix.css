@@ -1,8 +1,8 @@
 /* OH ONE: preserve approved artwork, hide duplicate baked-in logo, fit login */
 .intro{display:none!important}
 .hero{display:block!important;min-height:clamp(420px,43vw,645px)!important}
-.hero-art{position:absolute!important;inset:0!important;background-image:url('/assets/same_as_previous_scene_but_refined_the_overseas.png')!important;background-size:contain!important;background-position:center center!important;background-repeat:no-repeat!important;mask-image:none!important;filter:none!important;opacity:1!important}
-.hero-art::after{content:"";position:absolute;left:7%;top:1%;width:29%;height:15%;pointer-events:none;background:linear-gradient(90deg,#061a32 0%,#061a32ed 72%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 72%,transparent 100%);-webkit-mask-image:linear-gradient(to right,#000 0%,#000 72%,transparent 100%)}
+.hero-art{position:absolute!important;inset:0!important;background-image:url('/assets/oh-one-hero-approved.png'),url('/assets/same_as_previous_scene_but_refined_the_overseas.png')!important;background-size:contain!important;background-position:center center!important;background-repeat:no-repeat!important;mask-image:none!important;filter:none!important;opacity:1!important}
+.hero-art::after{display:none!important}
 .team-strip{margin-top:0!important}
 @media(max-width:900px){.hero{min-height:clamp(290px,49vw,460px)!important}.hero-art{inset:0!important}.hero-art::after{left:6%;top:5%;width:31%;height:14%}}
 @media(max-width:560px){.hero{min-height:max(220px,50vw)!important}.hero-art{inset:0!important}.hero-art::after{left:5%;top:5%;width:32%;height:14%}}
