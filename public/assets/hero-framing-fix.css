@@ -7,7 +7,7 @@
 .intro .lead{font-size:15px!important}
 .intro p.desc{display:none!important}
 .pillars{display:none!important}
-.hero-art{left:18%!important;right:-2%!important;top:-38px!important;bottom:0!important;background-size:contain!important;background-position:center center!important;mask-image:linear-gradient(to right,transparent 0%,#000 6%,#000 100%)!important;filter:none!important}
+.hero-art{left:22%!important;right:1%!important;top:0!important;bottom:22px!important;background-size:contain!important;background-position:center center!important;mask-image:linear-gradient(to right,transparent 0%,#000 6%,#000 100%)!important;filter:none!important}
 }
 @media(max-width:900px){
 .top{height:72px!important}
