@@ -1,0 +1,4 @@
+/* OH ONE image framing adjustment, 31 October 2026 */
+.hero-art{background-size:contain!important;background-repeat:no-repeat!important;background-position:center center!important;left:22%!important;right:0!important;filter:none!important}
+@media(max-width:900px){.hero-art{left:0!important;right:0!important;top:320px!important}}
+@media(max-width:560px){.hero-art{left:0!important;right:0!important;top:320px!important}}
