@@ -41,3 +41,9 @@ This list contains GitHub repositories, **not verified live domains/subdomains**
 - Previous HealthEd cPanel issue: directory permissions require 0750 after deploy; confirm `.cpanel.yml` per repository where applicable, and verify actual paths before editing.
 - Sites and GitHub repos should remain separate; control center provides a single interface and permission layer.
 - Consolidating ChatGPT project conversations is not an operation this registry performs.
+
+## Approved central admin hostname
+- **Target:** `https://admin.overseashighwaystudy.com` (confirmed by project owner, 2026-11-18).
+- **Status:** hostname selected, deployment **not** completed or verified. DNS, SSL, cPanel domain mapping, PHP/Composer/MySQL support, and app credentials still require configuration and testing.
+- Treat `overseashighwaystudy.com` as the parent domain for the admin interface, distinct from older `overseashighway.net` web properties. Existing sites retain their domains.
+- Never expose admin secrets or store student information in public git repos. Require authentication, MFA, least-privilege roles and audit logging before enabling writes.
